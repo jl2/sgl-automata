@@ -62,7 +62,8 @@
            (type (unsigned-byte 32) height i j))
   (setf (aref array (+ i (* height j))) value))
 
-(defmethod add-current-instances ((object 2d-cellular-automata))
+(defmethod add-current-instances ((object 2d-cellular-automata)
+                                  (render-style cell-render-style))
   "Draw the next row of automata data by adding translations to the instance buffer."
   (with-slots (buffers instance-count max-instances height width current-board-idx current-board-data) object
     (let ((buffer (get-buffer object :obj-transform))
@@ -146,7 +147,7 @@
                   0
                   (+ j 1))))
       (declare (type fixnum ip jp in jn))
-      (+ 
+      (+
        (2d-get current-board-data width ip jp)
        (2d-get current-board-data width ip j)
        (2d-get current-board-data width ip jn)
@@ -155,4 +156,3 @@
        (2d-get current-board-data width in jp)
        (2d-get current-board-data width in j)
        (2d-get current-board-data width in jn)))))
-

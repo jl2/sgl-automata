@@ -1,15 +1,46 @@
 * sgl-automata
+
 ** About
-This is a project to do something.
+Cellular Automata OpenGL visualization.
+
+** Example Usage
+#+begin_src lisp
+  (ql:quickload '(:simple-gl :sgl-automata))
+  (ql:quickload '(:3d-vectors :3d-matrices))
+  (ql:quickload :trivial-main-thread)
+  (use-package :3d-vectors)
+  (use-package :3d-matrices)
+
+  ;; Run in main thread for OSX
+  (tmt:with-body-in-main-thread
+      ()
+    (sgl:display-in
+     (sgla:create-1d-cellular-automata 1024 :rule 30)
+     (make-instance 'sgl:viewer :desired-fps 240)))
+  (tmt:with-body-in-main-thread ()
+    (sgl:display-in
+     (sgla:create-2d-cellular-automata 300 300)
+     (make-instance 'sgl:viewer :desired-fps 120)))
+
+  (tmt:with-body-in-main-thread ()
+    (sgl:display-in
+     (sgla:create-game-of-life 300 300)
+     (make-instance 'sgl:viewer
+                    :desired-fps 120
+                    :xform (m* (mperspective 60.0 1.0 0.1 1000.0)
+                               (mlookat (vec3 1.5 1.5 2.0)
+                                        (vec3 0 0 0)
+                                        +vy+)))))
+#+end_src
+
+#+RESULTS:
+: #<SIMPLE-TASKS:CALL-TASK :FUNC #<FUNCTION (LAMBDA ()) {53AB052B}> :STATUS :SCHEDULED {1027899413}>
 
 ** License
 ISC
 
-
 Copyright (c) 2021 Jeremiah LaRocco <jeremiah_larocco@fastmail.com>
 
 
-
-
-* Plan
-** TODO Fill in a TODO list.
+* Plan and TODO
+** TODO Implement line-render-style

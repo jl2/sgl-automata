@@ -59,7 +59,8 @@
 
 
 
-(defmethod add-current-instances ((object 1d-cellular-automata))
+(defmethod add-current-instances ((object 1d-cellular-automata)
+                                  (render-style cell-render-style))
   "Draw the next row of automata data by adding translations to the instance buffer."
 
   (with-slots (buffers instance-count max-instances width current-row-idx current-row-data) object

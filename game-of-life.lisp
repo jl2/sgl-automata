@@ -1,5 +1,5 @@
 ;; game-of-life.lisp
-;;
+
 ;; Copyright (c) 2021 Jeremiah LaRocco <jeremiah_larocco@fastmail.com>
 
 ;; Permission to use, copy, modify, and/or distribute this software for any
@@ -15,24 +15,6 @@
 ;; OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 (in-package :sgl-automata)
-
-;; (sgl:display-in
-;;  (sgla:create-2d-cellular-automata 256 256)
-;;  (make-instance 'sgl:viewer
-;;                 :desired-fps 120))
-
-;; (tmt:with-body-in-main-thread
-;;     ()
-;;   (sgl:display-in
-;;    (sgla:create-game-of-life 512 512
-;;                              :max-instances (* 512 512))
-;;    (make-instance 'sgl:viewer
-;;                   :desired-fps 120
-;;                   :xform (m* (mperspective 60.0 1.0 0.1 1000.0)
-;;                              (mlookat (vec3 1.5 1.5 2.0)
-;;                                       (vec3 0 0 0)
-;;                                       +vy+)))))
-
 
 (defclass game-of-life (2d-cellular-automata)
   ())
@@ -78,38 +60,3 @@
                      (turn-off object i j)))))
     (rotatef next-board-data current-board-data)
     (incf current-board-idx)))
-
-
-(defmethod add-current-instances ((object 2d-cellular-automata))
-  "Draw the next row of automata data by adding translations to the instance buffer."
-  (with-slots (buffers instance-count max-instances height width current-board-idx current-board-data) object
-    (let ((buffer (get-buffer object :obj-transform))
-          (cell-width (/ 2.0f0 (coerce width 'single-float)))
-          (cell-height (/ 2.0f0 height)))
-      (declare (type single-float cell-width cell-height))
-      (setf instance-count 0)
-      (with-slots (pointer) buffer
-        ;; Loop over each cell in the data
-        (loop
-          ;; Track whether any quads have been added
-          with updated = nil
-
-          ;; Calculate the quad location
-          for x-offset from 0 below width
-          for x-float real = (- 1.0f0 (* cell-width x-offset))
-          do
-             (loop
-               for y-offset from 0 below height
-               for y-float real = (- 1.0f0 (* cell-height y-offset))
-
-               ;; If the cell is 'on' then add a quad
-               when (is-on object x-offset y-offset) do
-                 (sgl:fill-pointer-offset (vec3 x-float y-float 0.0f0) ;(* -0.1f0 current-board-idx))
-                                          pointer
-                                          (* instance-count 3))
-                 (setf updated t)
-                 (incf instance-count))
-          finally
-             ;; Copy the buffer to OpenGL if anything changed.
-             (when updated
-               (reload buffer)))))))
