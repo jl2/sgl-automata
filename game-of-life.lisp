@@ -49,14 +49,14 @@
            for j fixnum from 0 below height
            for ncount = (count-neighbors object i j)
            do
-              (cond ((and (is-off object i j)
+              (cond ((and (is-off current-board-data height i j)
                           (= ncount 3))
-                     (turn-on object i j))
-                    ((and (is-on object i j)
+                     (turn-on next-board-data height i j))
+                    ((and (is-on current-board-data height i j)
                           (or (= ncount 2)
                               (= ncount 3)))
-                     (turn-on object i j))
+                     (turn-on next-board-data height i j))
                     (t
-                     (turn-off object i j)))))
+                     (turn-off current-board-data height i j)))))
     (rotatef next-board-data current-board-data)
     (incf current-board-idx)))

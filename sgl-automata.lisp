@@ -1,5 +1,5 @@
 ;; sgl-automata.lisp
-;;
+
 ;; Copyright (c) 2021 Jeremiah LaRocco <jeremiah_larocco@fastmail.com>
 
 ;; Permission to use, copy, modify, and/or distribute this software for any
@@ -19,18 +19,19 @@
 (setf sgl:*shader-dirs*
       (adjoin (asdf:system-relative-pathname :sgl-automata "shaders/") sgl:*shader-dirs*))
 
-(defclass cell-render-style ()
+(defclass render-style ()
   ())
 
-(defclass line-render-style ()
+(defclass cell-render-style (render-style)
+  ((max-instances :initform 10000 :initarg :max-instances :type fixnum)
+   (instance-count :initform 0 :type fixnum)
+   (style :initform (make-style "automata" "sgl-automata-vertex.glsl" "point-fragment.glsl"))))
+
+(defclass line-render-style (render-style)
   ())
 
 (defclass cellular-automata (instanced-opengl-object)
-  ((style :initform (make-style "automata" "sgl-automata-vertex.glsl" "point-fragment.glsl"))
-   (max-instances :initform 10000 :initarg :max-instances :type fixnum)
-   (instance-count :initform 0 :type fixnum)
-   (render-style :initform (make-instance 'cell-render-style) :initarg :render-style)
-   ))
+  ((render-style :initform (make-instance 'cell-render-style) :initarg :render-style)))
 
 (declaim (inline apply-rule left-element right-element compute-next-row add-row-instance))
 
