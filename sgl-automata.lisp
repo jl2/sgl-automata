@@ -25,7 +25,7 @@
 (defclass cell-render-style (render-style)
   ((max-instances :initform 10000 :initarg :max-instances :type fixnum)
    (instance-count :initform 0 :type fixnum)
-   (style :initform (make-style "automata" "sgl-automata-vertex.glsl" "point-fragment.glsl"))))
+   (style :initform (make-style-from-files "automata" "sgl-automata-vertex.glsl" "point-fragment.glsl"))))
 
 (defclass line-render-style (render-style)
   ())

@@ -202,4 +202,4 @@
           finally
              ;; Copy the buffer to OpenGL if anything changed.
              (when updated
-               (reload buffer)))))))
+               (reload buffer)))))))))
